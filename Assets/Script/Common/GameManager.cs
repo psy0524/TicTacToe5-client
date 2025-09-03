@@ -47,5 +47,12 @@ public class GameManager : Singleton<GameManager>
     protected override void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
         _canvas = FindFirstObjectByType<Canvas>();
+
+        if(scene.name == "Game")
+        {
+            // Block √ ±‚»≠
+            var blockController = FindFirstObjectByType<BlockController>();
+            blockController.InitBlocks();
+        }
     }
 }
