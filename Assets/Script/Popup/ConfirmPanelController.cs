@@ -5,12 +5,16 @@ public class ConfirmPanelController : PanelController
 {
     [SerializeField] private TMP_Text messageText;
 
+    public delegate void OnConfirmButtonClicked();
+    private OnConfirmButtonClicked _onConfirmButtonCliked;
+
     /// <summary>
     /// Confirm Panel을 표시하는 메서드
     /// </summary>
-    public void Show(string message)
+    public void Show(string message, OnConfirmButtonClicked onConfirmButtonClicked)
     {
         messageText.text = message;
+        _onConfirmButtonCliked = onConfirmButtonClicked;
         base.Show();
     }
     
@@ -19,8 +23,10 @@ public class ConfirmPanelController : PanelController
     /// </summary>
     public void OnClickConfirmButton()
     {
-        Hide();
-        GameManager.Instance.ChangeToMainScene();
+        Hide(() =>
+        {
+            _onConfirmButtonCliked?.Invoke();
+        });
     }
 
     /// <summary>
