@@ -6,7 +6,7 @@ public static class TicTacToeAI
     // 현재 상태를 전달하면 다음 최적의 수를 반환하는 메서드
     public static (int row, int col)? GetBestMove(Constants.PlayerType[,] board)
     {
-        float bestScore = 1000;
+        float bestScore = -1000;
         (int row, int col) movePosition = (-1, 1);
 
         for(var row = 0; row < board.GetLength(0); row++)
@@ -16,7 +16,7 @@ public static class TicTacToeAI
                 if (board[row, col] == Constants.PlayerType.None)
                 {
                     board[row, col] = Constants.PlayerType.PlayerB;
-                    var score = TicTacToeAI.DoMinMax(board, 0, false);
+                    var score = TicTacToeAI.DoMiniMax(board, 0, false);
                     board[row, col] = Constants.PlayerType.None;
                     if(score > bestScore)
                     {
@@ -33,7 +33,7 @@ public static class TicTacToeAI
         return null;
     }
 
-    private static float DoMinMax(Constants.PlayerType[,] board, int depth, bool isMaximizing)
+    private static float DoMiniMax(Constants.PlayerType[,] board, int depth, bool isMaximizing)
     {
         // 게임 종료 상태 체크
         if(CheckGameWin(Constants.PlayerType.PlayerA, board))
@@ -55,7 +55,7 @@ public static class TicTacToeAI
                     if (board[row, col] == Constants.PlayerType.None)
                     {
                         board[row, col] = Constants.PlayerType.PlayerB;
-                        var score = DoMinMax(board, depth + 1, false);
+                        var score = DoMiniMax(board, depth + 1, false);
                         board[row, col] = Constants.PlayerType.None;
                         bestScore = Mathf.Max(score, bestScore);
                     }
@@ -74,9 +74,9 @@ public static class TicTacToeAI
                     if (board[row, col] == Constants.PlayerType.None)
                     {
                         board[row, col] = Constants.PlayerType.PlayerA;
-                        var score = DoMinMax(board, depth + 1, true);
+                        var score = DoMiniMax(board, depth + 1, true);
                         board[row, col] = Constants.PlayerType.None;
-                        bestScore += Mathf.Min(score, bestScore);
+                        bestScore = Mathf.Min(score, bestScore);
                     }
                 }
             }
